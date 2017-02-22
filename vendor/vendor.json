@@ -1,0 +1,170 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "x2JXwE0SXPAnBRJTcP/z920hfLY=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/armon/go-metrics",
+			"path": "github.com/armon/go-metrics",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "PDusd0EuHz0oKiQKwKxFhbETxd8=",
+			"path": "github.com/circonus-labs/circonus-gometrics/api",
+			"revision": "dbab9a33438e3f8317407ef5d3a51c29340541db",
+			"revisionTime": "2017-02-21T20:27:28Z"
+		},
+		{
+			"checksumSHA1": "bQhz/fcyZPmuHSH2qwC4ZtATy5c=",
+			"path": "github.com/circonus-labs/circonus-gometrics/api/config",
+			"revision": "dbab9a33438e3f8317407ef5d3a51c29340541db",
+			"revisionTime": "2017-02-21T20:27:28Z"
+		},
+		{
+			"checksumSHA1": "gxHWof95u236wR9FvgaWcjfdfy0=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/gorhill/cronexpr",
+			"path": "github.com/gorhill/cronexpr",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "AQMAS0aD5VifN0ugbv8xNTt7mM4=",
+			"path": "github.com/hashicorp/consul/api",
+			"revision": "b300e9f0d2d51a0fdaab62ef9859a35b6b8203c4",
+			"revisionTime": "2017-02-14T02:46:35Z"
+		},
+		{
+			"checksumSHA1": "cdOCt0Yb+hdErz8NAQqayxPmRsY=",
+			"path": "github.com/hashicorp/errwrap",
+			"revision": "7554cd9344cec97297fa6649b055a8c98c2a1e55",
+			"revisionTime": "2014-10-28T05:47:10Z"
+		},
+		{
+			"checksumSHA1": "b8F628srIitj5p7Y130xc9k0QWs=",
+			"path": "github.com/hashicorp/go-cleanhttp",
+			"revision": "3573b8b52aa7b37b9358d966a898feb387f62437",
+			"revisionTime": "2017-02-11T01:34:15Z"
+		},
+		{
+			"checksumSHA1": "TNlVzNR1OaajcNi3CbQ3bGbaLGU=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/hashicorp/go-msgpack/codec",
+			"path": "github.com/hashicorp/go-msgpack/codec",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "lrSl49G23l6NhfilxPM0XFs5rZo=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/hashicorp/go-multierror",
+			"path": "github.com/hashicorp/go-multierror",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "ErJHGU6AVPZM9yoY/xV11TwSjQs=",
+			"path": "github.com/hashicorp/go-retryablehttp",
+			"revision": "6e85be8fee1dcaa02c0eaaac2df5a8fbecf94145",
+			"revisionTime": "2016-09-30T03:51:02Z"
+		},
+		{
+			"checksumSHA1": "A1PcINvF3UiwHRKn8UcgARgvGRs=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/hashicorp/go-rootcerts",
+			"path": "github.com/hashicorp/go-rootcerts",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "fgjVdm6pJLhAWR7kEyIWJLumCAg=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/hashicorp/go-version",
+			"path": "github.com/hashicorp/go-version",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "AZk0pYAEaiQpHFE4FkV+OXVYPEA=",
+			"path": "github.com/hashicorp/nomad/api",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "LwFRG6qag6ECeVfk/RoI7sbcKDU=",
+			"path": "github.com/hashicorp/nomad/helper",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "UOuTIv1Ef6r3cN9fImCq1SNQnCs=",
+			"path": "github.com/hashicorp/nomad/helper/args",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "J7j/5Jtk8la/xEAtu4e/6KIiqzs=",
+			"path": "github.com/hashicorp/nomad/helper/flatmap",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "AG1bV4gyOsPNIRsO3X9S94dhweM=",
+			"path": "github.com/hashicorp/nomad/nomad/structs",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "wpirHJV/6VEbbD+HyAP2/6Xc0ek=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/hashicorp/raft",
+			"path": "github.com/hashicorp/raft",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "E3Xcanc9ouQwL+CZGOUyA/+giLg=",
+			"origin": "github.com/hashicorp/consul/vendor/github.com/hashicorp/serf/coordinate",
+			"path": "github.com/hashicorp/serf/coordinate",
+			"revision": "b300e9f0d2d51a0fdaab62ef9859a35b6b8203c4",
+			"revisionTime": "2017-02-14T02:46:35Z"
+		},
+		{
+			"checksumSHA1": "HQtYvnSHa3OG2tSNMljW8vMvKm4=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/mitchellh/copystructure",
+			"path": "github.com/mitchellh/copystructure",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "AXacfEchaUqT5RGmPmMXsOWRhv8=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/mitchellh/go-homedir",
+			"path": "github.com/mitchellh/go-homedir",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "Z3FoiV93oUfDoQYMMiHxWCQPlBw=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/mitchellh/hashstructure",
+			"path": "github.com/mitchellh/hashstructure",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "mrqMlK6gqe//WsJSrJ1HgkPM0lM=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/mitchellh/reflectwalk",
+			"path": "github.com/mitchellh/reflectwalk",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		},
+		{
+			"checksumSHA1": "ZOhewV1DsQjTYlx8a+ifrZki2Vg=",
+			"path": "github.com/ryanuber/columnize",
+			"revision": "ddeb643de91b4ee0d9d87172c931a4ea3d81d49a",
+			"revisionTime": "2017-02-08T17:17:27Z"
+		},
+		{
+			"checksumSHA1": "CoxdaTYdPZNJXr8mJfLxye428N0=",
+			"origin": "github.com/hashicorp/nomad/vendor/github.com/ugorji/go/codec",
+			"path": "github.com/ugorji/go/codec",
+			"revision": "ac12e61553d05f21d9076e562415d82dbb2d379d",
+			"revisionTime": "2017-02-21T23:56:44Z"
+		}
+	],
+	"rootPath": "github.com/sean-/circonus-reaper"
+}
