@@ -10,6 +10,16 @@ import (
 	"github.com/hashicorp/errwrap"
 )
 
+type cliConfig struct {
+	circonusAPIKey  *string
+	circonusAppName *string
+	consulAddr      *string
+	dryRun          bool
+	excludedTargets []string
+	excludeRegexps  []*regexp.Regexp
+	nomadAddr       *string
+}
+
 type stringSliceArg []string
 
 // String prints the list of arguments as a comma separated string
@@ -27,16 +37,6 @@ func (s *stringSliceArg) Set(str string) error {
 	*s = append(*s, str)
 
 	return nil
-}
-
-type cliConfig struct {
-	circonusAPIKey  *string
-	circonusAppName *string
-	consulAddr      *string
-	dryRun          bool
-	excludedTargets []string
-	excludeRegexps  []*regexp.Regexp
-	nomadAddr       *string
 }
 
 func parseCLI() (*cliConfig, error) {
