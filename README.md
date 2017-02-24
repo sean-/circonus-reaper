@@ -23,6 +23,8 @@ Usage of circonus-reaper:
     	Consul Agent Address (default "127.0.0.1:8500")
   -dry-run
     	Do not make any actual changes
+  -exclude-regexp value
+    	Regexp for a targets to exclude (may be set more than once)
   -exclude-target value
     	Targets to exclude (may be set more than once)
   -nomad-addr string
@@ -35,8 +37,7 @@ Usage of circonus-reaper:
 $ circonus-reaper \
     -consul-addr=consul.service.consul:8500 \
     -exclude-target=127.0.0.1 \
-    -exclude-target=q._caql \
     -exclude-target=rabbitmq.service.consul \
-    -exclude-target=pg.example._aws \
+    -exclude-regexp='.+\._(aws|caql)$' \
     -nomad-addr=http://nomad.service.consul:4646/
 ```
