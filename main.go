@@ -84,6 +84,11 @@ func main() {
 			continue
 		}
 
+		if client.ExcludeTarget(host) {
+			log.Printf("INFO: skipping nomad client %q (excluded target)", host)
+			continue
+		}
+
 		// 2) Pull the nomad allocs for a given target
 		log.Printf("TRACE: searching nomad client %q", host)
 		allocIDs, err := client.FindAllocIDsByNodeID(nodeID)
@@ -164,10 +169,10 @@ func main() {
 				// Update the checkbundle metrics
 				if dirtyCheckBundle {
 					if cliConfig.dryRun {
-						log.Printf("INFO: dry-run: about to update CBM for %q/%q", host, cbm.CID)
+						log.Printf("INFO: dry-run: about to update %q's check_bundle_metric %q", host, cbm.CID)
 						continue
 					} else {
-						log.Printf("INFO: about to update CBM for %q/%q", host, cbm.CID)
+						log.Printf("INFO: about to update %q's check_bundle_metric %q", host, cbm.CID)
 					}
 
 					if _, err := client.circonusClient.UpdateCheckBundleMetrics(cbm); err != nil {
@@ -264,6 +269,7 @@ func setup(cli *cliConfig) (*client, error) {
 		circonusClient: circonusClient,
 		consulClient:   consulClient,
 		nomadClient:    nomadClient,
+		excludeRegexps: cli.excludeRegexps,
 	}
 
 	c.excludeTargets = make(map[string]bool, len(cli.excludedTargets))

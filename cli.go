@@ -6,6 +6,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/hashicorp/errwrap"
 )
 
 type stringSliceArg []string
@@ -33,6 +35,7 @@ type cliConfig struct {
 	consulAddr      *string
 	dryRun          bool
 	excludedTargets []string
+	excludeRegexps  []*regexp.Regexp
 	nomadAddr       *string
 }
 
@@ -45,6 +48,9 @@ func parseCLI() (*cliConfig, error) {
 
 	var consulAddr string
 	flag.StringVar(&consulAddr, "consul-addr", "127.0.0.1:8500", "Consul Agent Address")
+
+	var excludeRegexpsArg stringSliceArg
+	flag.Var(&excludeRegexpsArg, "exclude-regexp", "Regexp for a targets to exclude (may be set more than once)")
 
 	var excludeTargetArg stringSliceArg
 	flag.Var(&excludeTargetArg, "exclude-target", "Targets to exclude (may be set more than once)")
@@ -61,11 +67,21 @@ func parseCLI() (*cliConfig, error) {
 		circonusAPIKey = os.Getenv("CIRCONUS_API_KEY")
 	}
 
+	excludeRegexps := make([]*regexp.Regexp, 0, len(excludeRegexpsArg))
+	for _, reArg := range excludeRegexpsArg {
+		re, err := regexp.Compile(reArg)
+		if err != nil {
+			return nil, errwrap.Wrapf(fmt.Sprintf("unable to compile regexp %q: {{err}}", reArg), err)
+		}
+		excludeRegexps = append(excludeRegexps, re)
+	}
+
 	return &cliConfig{
 		circonusAPIKey:  &circonusAPIKey,
 		circonusAppName: &circonusAppName,
 		consulAddr:      &consulAddr,
 		dryRun:          dryRun,
+		excludeRegexps:  excludeRegexps,
 		excludedTargets: excludeTargetArg,
 		nomadAddr:       &nomadAddr,
 	}, nil

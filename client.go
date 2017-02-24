@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"regexp"
 
 	circonusapi "github.com/circonus-labs/circonus-gometrics/api"
 	"github.com/circonus-labs/circonus-gometrics/api/config"
@@ -16,6 +17,7 @@ import (
 type client struct {
 	circonusClient *circonusapi.API
 	consulClient   *consulapi.Client
+	excludeRegexps []*regexp.Regexp
 	excludeTargets map[string]bool
 	nomadClient    *nomadapi.Client
 
@@ -49,7 +51,17 @@ func (c *client) DisableTargetChecks(target string) error {
 
 func (c *client) ExcludeTarget(host string) bool {
 	_, found := c.excludeTargets[host]
-	return found
+	if found {
+		return true
+	}
+
+	for _, re := range c.excludeRegexps {
+		if b := re.MatchString(host); b {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (c *client) ExcludedTargets() []string {
