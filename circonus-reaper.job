@@ -20,10 +20,11 @@ job "circonus-reaper" {
       config {
         command = "/local/circonus-reaper"
         args = [
+          "-dry-run", # Comment out when running in prod
           "-consul-addr=consul.service.consul:8500",
-          "-exclude-regexp='^my-special-host-.+$'",
+          "-exclude-regexp=^my-special-host-.+$$",  # Note the escaped $$
           "-exclude-target=127.0.0.1",
-          "-exclude-target=q._caql",
+          "-exclude-target=.+\\._(aws|caql)$$",     # Note the double escaped \\
           "-nomad-addr=http://nomad.service.consul:4646/",
         ]
       }
