@@ -1,0 +1,44 @@
+job "circonus-reaper" {
+  region      = "global"
+  datacenters = ["dc1"]
+  type        = "batch"
+
+  periodic {
+    cron = "@daily"
+    # cron = "2 */6 * * * *"
+    prohibit_overlap = true
+  }
+
+  group "circonus-reaper" {
+    task "reaper" {
+      driver = "exec"
+
+      artifact {
+        source = "s3::https://s3.amazonaws.com/my-corp-nomad-artifacts/circonus-reaper/circonus-reaper.tar.gz"
+      }
+
+      config {
+        command = "/local/circonus-reaper"
+        args = [
+          "-consul-addr=consul.service.consul:8500",
+          "-exclude-regexp='^my-special-host-.+$'",
+          "-exclude-target=127.0.0.1",
+          "-exclude-target=q._caql",
+          "-nomad-addr=http://nomad.service.consul:4646/",
+        ]
+      }
+
+      resources {
+        cpu = 500
+        # NOTE(sean@): At the time of writing, this job is consuming ~9.4MB of
+        # RAM.  Leaving plenty of room "just in case."
+        memory = 32
+      }
+
+      env {
+        # Populate with the correct key for the acccount you want to manage.
+        CIRCONUS_API_KEY = "<Circonus API Key>"
+      }
+    }
+  }
+}
