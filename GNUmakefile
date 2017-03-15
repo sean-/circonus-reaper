@@ -2,6 +2,7 @@ NAME ?= $(shell basename "$(CURDIR)")
 GIT_COMMIT ?= $(shell git rev-parse --short HEAD)
 SOURCE_FILES = $(shell find $(CURDIR) -type f -name '*.go')
 PKG_FILES = bin/*
+TAR=$(shell which 2>&1 /dev/null gnutar gtar tar | head -1)
 
 EFFECTIVE_LD_FLAGS ?= "-X main.GitCommit=$(GIT_COMMIT) $(LD_FLAGS)"
 
@@ -16,7 +17,7 @@ bin/$(NAME): $(SOURCE_FILES)
 
 pkg/$(NAME).tar.gz: bin/$(NAME)
 	mkdir -p pkg/
-	tar -czf pkg/$(NAME).tar.gz --xform='s,bin/,,' --xform='s,_build/,,' $(PKG_FILES)
+	$(TAR) -czf pkg/$(NAME).tar.gz --xform='s,bin/,,' --xform='s,_build/,,' $(PKG_FILES)
 
 .PHONY: clean
 clean: ## Clean build environment
