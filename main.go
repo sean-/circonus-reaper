@@ -23,41 +23,54 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := client.DeactivateUnknownHosts(); err != nil {
-		log.Printf("ERROR: unable to deactivate unknown hosts: %v", err)
-		os.Exit(1)
-	}
+	switch client.mode {
+	case "query":
+		if err := client.DeactivateMatchingQuery(); err != nil {
+			log.Printf("ERROR: unable to deactivate metrics matching %q: %v", client.metricQuery, err)
+			os.Exit(1)
+		}
+	case "consul/nomad":
+		if err := client.DeactivateUnknownHosts(); err != nil {
+			log.Printf("ERROR: unable to deactivate unknown hosts: %v", err)
+			os.Exit(1)
+		}
 
-	if err := client.DeactivateNomadCompletedAllocs(); err != nil {
-		log.Printf("ERROR: unable to deactivate completed nomad allocs: %v", err)
-		os.Exit(1)
+		if err := client.DeactivateNomadCompletedAllocs(); err != nil {
+			log.Printf("ERROR: unable to deactivate completed nomad allocs: %v", err)
+			os.Exit(1)
+		}
+
 	}
 
 	client.PrintStats()
 }
 
 func setup(cli *cliConfig) (*client, error) {
+	c := &client{
+		dryRun:         cli.dryRun,
+		excludeRegexps: cli.excludeRegexps,
+		mode:           cli.mode,
+		metricQuery:    cli.metricQuery,
+	}
+
 	circonusClient, err := setupCirconusClient(cli)
 	if err != nil {
 		return nil, errwrap.Wrapf("unable to setup Circonus client: {{err}}", err)
 	}
+	c.circonusClient = circonusClient
 
-	consulClient, err := setupConsulClient(cli)
-	if err != nil {
-		return nil, errwrap.Wrapf("unable to setup Nomad client: {{err}}", err)
-	}
+	if cli.mode == "consul/nomad" {
+		consulClient, err := setupConsulClient(cli)
+		if err != nil {
+			return nil, errwrap.Wrapf("unable to setup Nomad client: {{err}}", err)
+		}
+		c.consulClient = consulClient
 
-	nomadClient, err := setupNomadClient(cli)
-	if err != nil {
-		return nil, errwrap.Wrapf("unable to setup Nomad client: {{err}}", err)
-	}
-
-	c := &client{
-		circonusClient: circonusClient,
-		consulClient:   consulClient,
-		dryRun:         cli.dryRun,
-		nomadClient:    nomadClient,
-		excludeRegexps: cli.excludeRegexps,
+		nomadClient, err := setupNomadClient(cli)
+		if err != nil {
+			return nil, errwrap.Wrapf("unable to setup Nomad client: {{err}}", err)
+		}
+		c.nomadClient = nomadClient
 	}
 
 	c.excludeTargets = make(map[string]bool, len(cli.excludedTargets))
@@ -74,8 +87,10 @@ func setup(cli *cliConfig) (*client, error) {
 
 func setupCirconusClient(cli *cliConfig) (*circonusapi.API, error) {
 	cfg := &circonusapi.Config{
+		Debug:    false,
 		TokenApp: *cli.circonusAppName,
 		TokenKey: *cli.circonusAPIKey,
+		URL:      *cli.circonusAPIURL,
 	}
 
 	c, err := circonusapi.NewClient(cfg)

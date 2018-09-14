@@ -13,6 +13,7 @@ import (
 	consulapi "github.com/hashicorp/consul/api"
 	"github.com/hashicorp/errwrap"
 	nomadapi "github.com/hashicorp/nomad/api"
+	"github.com/pkg/errors"
 	"github.com/ryanuber/columnize"
 )
 
@@ -31,7 +32,11 @@ var (
 )
 
 type client struct {
+	mode           string
 	circonusClient *circonusapi.API
+
+	metricQuery string
+
 	consulClient   *consulapi.Client
 	excludeRegexps []*regexp.Regexp
 	excludeTargets map[string]bool
@@ -174,6 +179,57 @@ func (c *client) DeactivateNomadCompletedAllocs() error {
 						continue
 					}
 				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func (c *client) DeactivateMatchingQuery() error {
+	log.Printf("DEBUG: query: %q", c.metricQuery)
+	searchQuery := circonusapi.SearchQueryType(c.metricQuery)
+	filter := circonusapi.SearchFilterType{
+		"size": []string{"1000"},
+	}
+
+	metricsToDisable, err := c.circonusClient.SearchMetrics(&searchQuery, &filter)
+	if err != nil {
+		return errors.Wrapf(err, "unable to search for target metrics %q: %v", c.metricQuery, err)
+	}
+
+	// map[CheckBundleCID]map[metric.MetricName]struct{}
+	checkBundles := make(map[string]map[string]struct{}, 0)
+	if metricsToDisable != nil {
+		for _, metric := range *metricsToDisable {
+			if _, found := checkBundles[metric.CheckBundleCID]; !found {
+				checkBundles[metric.CheckBundleCID] = make(map[string]struct{})
+			}
+			checkBundles[metric.CheckBundleCID][metric.MetricName] = struct{}{}
+		}
+	}
+
+	for cbid, cb := range checkBundles {
+		log.Printf("DEBUG: check bundle %q", cbid)
+		var dirty bool
+		checkBundle, err := c.circonusClient.FetchCheckBundle(circonusapi.CIDType(&cbid))
+		if err != nil {
+			return errors.Wrapf(err, "unable to fetch checkbundle %q", cbid)
+		}
+
+		// Build a list of metrics that we
+		for i, metric := range checkBundle.Metrics {
+			if _, found := cb[metric.Name]; found {
+				dirty = true
+				checkBundle.Metrics[i].Status = "available"
+				disabledMetrics++
+				log.Printf("INFO: toggling metric %q/%q to available", cbid, metric.Name)
+			}
+		}
+
+		if dirty && !c.dryRun {
+			if _, err := c.circonusClient.UpdateCheckBundle(checkBundle); err != nil {
+				return errors.Wrapf(err, "unable to update checkbundle %q", cbid)
 			}
 		}
 	}
@@ -411,8 +467,14 @@ func (c *client) Validate() error {
 		return fmt.Errorf("Circonus client can not be nil")
 	}
 
-	if c.consulClient == nil {
-		return fmt.Errorf("Consul client can not be nil")
+	switch c.mode {
+	case "query":
+	case "consul/nomad":
+		if c.consulClient == nil {
+			return fmt.Errorf("Consul client can not be nil")
+		}
+	default:
+		return fmt.Errorf("unsupported mode: %q", c.mode)
 	}
 
 	return nil
